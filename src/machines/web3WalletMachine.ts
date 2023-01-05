@@ -1,7 +1,9 @@
+import { OwnedNft } from "alchemy-sdk/dist/src/types/types";
 import { assign, createMachine } from "xstate";
+import { walletAssetsMachine } from "./walletAssetsMachine";
 
 export const web3WalletMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QHcwCMDMB1AhgGzzABcBZHAYwAsBLAOzADoA5AeQBUB9AGRYHFeAogBEOASSYBicgHta9ckVwFiAbQAMAXUSgADtNjUi1WdpAAPRACYA7AA4GagJwA2VwEZrlty8cYANCAAnogALI4MAKzObm4hlpa+ERG2GBgAvmkBqJhKhKQUNPQMPCwA0uK8HABiLABK3HyCIlgAglxcAmwSELKMdABu0gDWjNnY+HlkVHSMJeVMlTX1PPzCHK3tnQgD0uQ4RrLqGkemegYHtKYWCAC0HtYOyRFutm4Yjt62ISEBwQjeIQYjkszksanirzslgi1gyWXQ42U+WmRTmFWqdQaq2abQ6XTAACcCdICQwdHh9gAzEkAWwYY1yxCmhVmLDK6KWWKa61xWx2ewuRxOSBAZ0MxkuIuud2sDzUTxebw+ji+PyCiDcajcQOsGE1Wucjhc0WccJADImTIKMwYAGEWEwmAJbWx0Rs8d1egwdiN6QjGciWXaHU6XW7eWxtrRBgKJULNKd9OKTFLENY3BEGNYImCQhFjTmXr9EBg5TFLLZVSFbAk1BgQmaLUjmTb7Y7na6FjzNviiSSyRSiNSCXSm5NrUU26HO5V3Xzo7t9nHNMLdEmLlcrHYHMbop5vIb-OrbjFwilUhgcyE1M5XirG-7LYHWyGO928RwBLVanUJLAdGAkAAKo6KuorrhKm4nrKjy2M8rzvJ83zFggYSRNEbwQhgYLprCmTmo+zYTowU5vnOnBfj+tQSGYsBEPsjA4JSRCEgAFBgaicQAlBIY5WiiJGvi676dJ+351GBYobqm0FygqCHKqqKFqAwCSvM4N5qNmGZglqGT4bQ0gQHAph8c+9CJuckEyTcETfAwriOU5jnWChNw4QwF6pFeN53rYD45E+LZFKwnArNy4iWcmkqgNcjiAuCsS2OCXgaW4lhqn8EQqTe5bxJ4cH5v5+FmcFrLYmITBRdJsWIMC2p1rElipPu8q2ChXgqW8NbZTY1a2HYDYlYR44CcUbLzIsmLhWs5HVdZtW3GEzgOc5a2uceHj2GoNZgpqji6rEsoBYio1BqRYZdnNIpSQt5ihK8QLOEk14aRE9ZfChMSqYa1jVnmTjXk1J0BmVwbtsJ5FiVR80potNx5it8pJDWzghIN2ZHn8GD2NYO2xI1GYeN8+lpEAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QHcwCMDMB1AhgGzzABcBZHAYwAsBLAOzADoA5AeQBUB9AGRYHFeAogBEOASSYBicgHta9ckVwFiAbQAMAXUSgADtNjUi1WdpAAPRAFoAjNYCcGBgDYMAFgCsatfbUAmVxgANCAAnoju1q4MAOzuvtF21n4AHAm+vgC+GcGomEqEpBQ09Aw8-MJiTKUsAIJC4rwcNQDKzQJszRIQsox0AG7SANaMudj4BWRUdIxlgiLi1XUNTa3tzQj90uQ4RrLqGvumega7tKYWCDbRjsm+ya7eTr5qrr6RwWEIGL6Otu7uGDULic9hBWRy6DGykKUxKswqCx4SyYjRabQ6EjAACcsdIsQwdHgdgAzPEAWwYo3yxEmxRmfDmlUW9RRK3R60221O+0OSBAx0MxjOfIuVxudwe1ieLzerg+iFevgYALedjsbz8tgw4JAVPGNKK02q5XmVSRLNRqwx3RKm2GlMh1JhdONjMRtQtbLWG1oAy5QpU1gOmiO+kFJhFVms1wYt3uj2er3eoQV0TUDDU33s6qSb2s2uyusd+udRvhpuZyzRa0xOLxBKJRFJWIpeuhtLLDIRZo9VatHN9Wx2AaDvN0YdO5yjMbjkulSblKYQ8Xczms-0BwNB1h1bYmhrhXYrbBYAGkBExmtwPRwBAAlO8sO8SPDSHAQNhDMC0WA1KA4Ogx35CchSnS5o3FeMpUTWV5S+aIlUzVUATsf5Il3Yt2wPekTSZJgADEOmvOpbwfJ8XzfD8vx-P8ANoICBUnSNwJnCUExlZNPnSVc-gBIEMBBOwwULPcDVhekz2WfCn2vXCsBqLguHaLoegYO0Rkw-dxOqSTWWku9ZMZeTFPaH0-WHPZNAYkCI1AUU7DUaIYjuXwAXcVxbGiWI4OSX41DiNxIlcVwEKcDC8hLDtD10xp9MMipjKUtha1xfFCRJckHQirDtJ4GKODi8sOES0zOQs+irJDPlGNA5jLAcpyENuNyPOjbyl3q2MQuSeN3Acvq0zscKoS0l0AGEWCYJgBDGthlhK5KbV6Qd7VE0sSgmqaZrm1kFrModuUqrRqps4U7KsWIoicTxrFVUFAUXT5XGSdMklQpx7nc3zMhEzSxPGybptm+aFKSlL63SptMrWqLGE2oGdsaPaysO4NjvHE5avO8DrF85w3E8bwHP8IIlyTGI1WuuxomSOIqYLCFstGo14e24rQfaUjH2fWAdDASAAFUdGszHbPMKwHCcBhcfza5kicEF3OiODLCcdM3BphwvFpl5afcYanVhhhWdm9mTM4e9uYkMxYCIHZGBwYkiGxAAKQEvAASgkGHsONwG2YWrmnxF8MzvFy5Jel5JZYweXFZClWkic+5Nee1zfA++4skLWhpAgOBTB98TQ1FsPRVuiJ8Y8LwfBJxPUIYDXkjsNO6Z61wDci33WE4IrxBL0OwNV5uo9l2wXjUdVfBVvqupphIhNppPok7nKXT7pgB6Y7HLFcD7lQwdcM-nWCl3zHj1z4rchJ3X6mf+ztcPdZFLXZLesfD3fngPo+FZgzjEDpGTtdFU0c1bpDsMkVezNDxPyqCec8l5iJCGEO-MWFxIgMDeCnDAGAEjuBpgNOC3wlS8U3AJbc0CH6wLdPAs8F4rzmiDneNBZdECYOwSFXB+DCHU2IS9NcG5+KCWEozEa1CcK0OYIRRhHpUEnVLmBdwyQsG4y4Xg1CNMnBwU8EqASG5XIBHcnvfWd9xHrUkd2aRREmGWyfKwsC0ZVxoRek4aIt1Ej2DgtxaWl8aapGjE4IaZjDa+zyqeKSMkioLQcXVW6mYq6E1rgEOCbiMzR38RXH4WcQld20ibRGZskqxJ3tTFRWY1QOWbnEGmcFuqNwoT8dxyjuphVyWvFm-tTaBzsSwhRg84nPEcC4auRM-ApI6mmZydxYgfWUdEVwqFs4ZCAA */
   createMachine(
     {
       id: "web3WalletMachine",
@@ -20,7 +22,7 @@ export const web3WalletMachine =
             data: string;
           };
         },
-        events: {} as { type: "connectWallet" } | { type: "speedUp" },
+        events: {} as { type: "connectWallet" } | { type: "speedUp" } | { type: "loadTokensAgain" },
       },
       states: {
         NOT_LOGGED_IN: {
@@ -31,7 +33,12 @@ export const web3WalletMachine =
           },
         },
 
-        LOGGED_IN: {},
+        LOGGED_IN: {
+          type: "final",
+          invoke: {
+            src: walletAssetsMachine,
+          },
+        },
 
         LOOKING_FOR_LOGGED_WALLET: {
           invoke: {
