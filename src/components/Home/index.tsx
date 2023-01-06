@@ -18,16 +18,15 @@ export default function Home() {
 
   return (
     <div className="App">
-      <header className="flex items-center justify-center w-full shadow-md p-5">
+      <header className="flex flex-col items-center justify-center w-full shadow-md p-5">
         <h1 className="font-bold text-2xl">DAPP Portfolio</h1>
+        {!!walletAddress ? <p>{walletAddress}</p> : <p>Connect your wallet</p>}
       </header>
 
-      <main className="p-4 items-center flex flex-col">
+      <main className="px-12 p-4 ">
         <div>
-          <h2>{JSON.stringify(currentState)}</h2>
-          <h2>{JSON.stringify({ walletAddress, error, loading })}</h2>
           {!isLoggedIn && (
-            <>
+            <div className="items-center flex flex-col">
               <button
                 onClick={() => web3Service.send({ type: "connectWallet" })}
                 className="border rounded-md p-4 px-12 hover:bg-gray-800 hover:text-white transition  border-gray-800 font-semibold"
@@ -35,7 +34,7 @@ export default function Home() {
                 Connect your Wallet
               </button>
               <p className="mt-1 text-gray-800">And take knowledge of all your on-chain assets! ✨</p>
-            </>
+            </div>
           )}
 
           {isLoggedIn && <TabMenu />}

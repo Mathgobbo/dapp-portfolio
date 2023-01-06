@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
+html {
+  @apply box-border
+}
+* {
+  @apply box-border
+}

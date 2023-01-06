@@ -1,5 +1,6 @@
 import { OwnedNft } from "alchemy-sdk/dist/src/types/types";
 import { assign, createMachine } from "xstate";
+import { TokenResponse } from "../types/TokenResponse";
 
 export const walletAssetsMachine =
   /** @xstate-layout N4IgpgJg5mDOIC5QHUCCAZdBRAKgfVQGVDdC8BZVAYQAkBJAOSwDocB5AaSwcOfTdQARRgHE87LjwDEEAPYA7MMwCW8gG6yA1krSZcBYqQrV6TVp269+Q0eIs8EqjQGMAhgBdlCgNoAGALp+-oigAA6ysMqeCiEgAB6IAIyJAGzMvgAciRkpAMwZubkpAKyJACwANCAAnogAtGW+zMUpAOxlGWW5xQCcha2+ZWUAvsNVutj4RCQ4ZJS0jCwSlnwCwgxiy9JgAE47sjvMoQA2HgBmBwC2zBP600bzpkv2Vmu2W4SO6rJu0fJBQVi4Uif1iCQQyTSmWyeQKRVKlRqSV8ACZmBkMi1isUUa1Ej0WhkeqNxhhJgYZnMTItzJJeB88NZBHgsAAlVlsVlSY6yVwQHBaMDyWCoKCuVSApAgYFRLzyMFJNrNXy5Vq5PqJXwpFIdXJVWoIHHMfJYlHYnGZTEkkC3KaGWbGBZmBgAMVmqxsGzwrtmMgUSicgpuZLu9qpTpYPtenrEUa+Lg8coBASBEVlMSl4M1TRRZQJ2TK2uKvkGKX1iFyZUSzESKJStc6rQGGUGIzGNpDdspjqezCjHvWsbdhCku32hxO5yuwb0XYe1Odw4Htjjgd+SYCkrCadBmeRObzpU6RZLhfLCA6ZWarR6daymVVQzbpNnFPnEb7S6jjLWLPZnO5XkIAYM53BFMUJRTKUZV3UAszyY0el8RJiyQqtUTyc8uivXwbzrYp1VSOsymKUZ23kWQIDgWJbTfB1HkWVMQTlBUEDqfE0hSFFazzFJOh6G8cnPOpuOKZo2jzLUUKJXJrVo+56IXZ46SY9N5T3NjygyZguJ4no+LzQSyyRTSUW0rV2gKMpWhRfIhgyOTOzo8New+ZcvQ+VTYPiepsx07jc30-ijOE-FmDxXpsi1FFuMSGyHPbeSwx7Gk3IZJksEELyWI07oxOxKS4tvXCYr1Ez2O0zpfFvPopNyHjnw7V8FJc1KXlpSwfyEP8OVZbKMzgitsWaYt6yKlESts88UiaIKBIKTUMjxEjHOa5KGMXWZ+vUwbNMLZpUmSQKih6fTzzNXJ-PrbjCm6PFb1W8kWpSzbo0Hb1h221i6h6bTSjG46UlOrjzyKasBNaIHrPaCbilaR7Q27DbIy-YcusETKvtylEenCwoiRKJ8UMRA0ijRTE726XJURyFEEbnRSP37b8mR6zksd23Icbx-J9OKIn+awso0W1M0emSayzKQ0iyKAA */
@@ -11,7 +12,7 @@ export const walletAssetsMachine =
         loadingNfts: true,
         loadingTokens: true,
         nfts: [] as OwnedNft[],
-        tokens: [] as string[],
+        tokens: [] as TokenResponse[],
         loadTokenError: undefined as string | undefined,
         loadNftsError: undefined as string | undefined,
       },
@@ -19,7 +20,7 @@ export const walletAssetsMachine =
       schema: {
         services: {} as {
           loadTokens: {
-            data: string[];
+            data: TokenResponse[];
           };
           loadNfts: {
             data: OwnedNft[];
