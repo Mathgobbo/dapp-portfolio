@@ -8,6 +8,7 @@ import {
 } from "../../context/Web3WalletContext";
 import { useSelector } from "@xstate/react";
 import { TabMenu } from "./components/TabMenu";
+import { Footer } from "../commom/Footer";
 export default function Home() {
   const web3Service = useWeb3Wallet();
   const walletAddress = useSelector(web3Service, walletSelector);
@@ -40,6 +41,7 @@ export default function Home() {
           {isLoggedIn && <TabMenu />}
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
