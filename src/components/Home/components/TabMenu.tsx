@@ -5,6 +5,7 @@ import { useWeb3Wallet, walletSelector } from "../../../context/Web3WalletContex
 import { walletAssetsMachine } from "../../../machines/walletAssetsMachine";
 import { TokenResponse } from "../../../types/TokenResponse";
 import { NFTsTab } from "./NftsTab";
+import { TokensTab } from "./TokensTab";
 
 export const TabMenu = () => {
   const web3Service = useWeb3Wallet();
@@ -35,34 +36,38 @@ export const TabMenu = () => {
             ...metadata,
             balance: formattedBalanceStr,
           });
-          console.log(`${i++}. ${metadata.name}: ${formattedBalanceStr} ${metadata.symbol}`);
         }
-        console.log(finalArr);
         return finalArr;
       },
     },
   });
   const [selectedTab, setSelectedTab] = useState<"NFTS" | "TOKENS">("NFTS");
 
-  const { loadingNfts, nfts, loadNftsError } = state.context;
+  const { loadingNfts, nfts, loadNftsError, loadTokenError, loadingTokens, tokens } = state.context;
   return (
     <section className="w-full">
       <div className="flex justify-around">
         <h3
           onClick={() => setSelectedTab("NFTS")}
-          className={`${selectedTab === "NFTS" ? "font-bold" : "font-normal"} transition`}
+          className={`${selectedTab === "NFTS" ? "font-bold" : "font-normal"} cursor-pointer`}
         >
           NFTs
         </h3>
         <h3
           onClick={() => setSelectedTab("TOKENS")}
-          className={`${selectedTab === "TOKENS" ? "font-bold" : "font-normal"} transition`}
+          className={`${selectedTab === "TOKENS" ? "font-bold" : "font-normal"} cursor-pointer`}
         >
           Tokens
         </h3>
       </div>
       <hr className="my-2" />
-      <div>{selectedTab === "NFTS" ? <NFTsTab error={loadNftsError} loading={loadingNfts} nfts={nfts} /> : <></>}</div>
+      <div>
+        {selectedTab === "NFTS" ? (
+          <NFTsTab error={loadNftsError} loading={loadingNfts} nfts={nfts} />
+        ) : (
+          <TokensTab error={loadTokenError} loading={loadingTokens} tokens={tokens} />
+        )}
+      </div>
     </section>
   );
 };

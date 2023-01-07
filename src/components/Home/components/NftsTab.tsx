@@ -1,7 +1,6 @@
 import { OwnedNft } from "alchemy-sdk";
 
 export const NFTsTab = ({ error, loading, nfts }: { nfts: OwnedNft[]; loading: boolean; error: any }) => {
-  console.log(nfts);
   return (
     <div>
       {/* <p>{JSON.stringify({ error, loading, nfts })}</p> */}
